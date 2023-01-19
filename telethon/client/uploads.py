@@ -117,6 +117,7 @@ class UploadMethods:
             schedule: 'hints.DateLike' = None,
             comment_to: 'typing.Union[int, types.Message]' = None,
             ttl: int = None,
+            nosound_video: bool = True,
             **kwargs) -> 'types.Message':
         """
         Sends message with the given file to the specified entity.
@@ -395,7 +396,7 @@ class UploadMethods:
             progress_callback=progress_callback,
             attributes=attributes,  allow_cache=allow_cache, thumb=thumb,
             voice_note=voice_note, video_note=video_note,
-            supports_streaming=supports_streaming, ttl=ttl
+            supports_streaming=supports_streaming, ttl=ttl, nosound_video=nosound_video
         )
 
         # e.g. invalid cast from :tl:`MessageMediaWebPage`
@@ -668,6 +669,7 @@ class UploadMethods:
             progress_callback=None, attributes=None, thumb=None,
             allow_cache=True, voice_note=False, video_note=False,
             supports_streaming=False, mime_type=None, as_image=None,
+            nosound_video=True,
             ttl=None):
         if not file:
             return None, None, None
@@ -755,7 +757,7 @@ class UploadMethods:
 
             # setting `nosound_video` to `True` doesn't affect videos with sound
             # instead it prevents sending silent videos as GIFs
-            nosound_video = True if mime_type.split("/")[0] == 'video' else None
+            nosound_video = nosound_video if mime_type.split("/")[0] == 'video' else None
 
             media = types.InputMediaUploadedDocument(
                 file=file_handle,
